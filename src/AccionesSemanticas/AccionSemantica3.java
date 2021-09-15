@@ -1,8 +1,12 @@
 package AccionesSemanticas;
 
 import AnalizadorLexico.Token;
-
+import AnalizadorLexico.TablaSimbolos;
 public class AccionSemantica3 extends AccionSemantica{
+
+    public AccionSemantica3(TablaSimbolos ts, int indice){
+        super(ts, indice);
+    }
 
     @Override
     public String accion(char c) {
@@ -21,4 +25,6 @@ public class AccionSemantica3 extends AccionSemantica{
             return "ID " + this.contenido.toString();
         }
     }
+
+
 }

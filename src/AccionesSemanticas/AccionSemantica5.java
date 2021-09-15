@@ -1,8 +1,12 @@
 package AccionesSemanticas;
 
 import AnalizadorLexico.Token;
-
+import AnalizadorLexico.TablaSimbolos;
 public class AccionSemantica5 extends AccionSemantica{
+
+    public AccionSemantica5(TablaSimbolos ts, int indice){
+        super(ts, indice);
+    }
 
     @Override
     public String accion(char c) {

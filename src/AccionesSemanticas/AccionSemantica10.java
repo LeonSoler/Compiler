@@ -1,8 +1,13 @@
 package AccionesSemanticas;
 
+import AnalizadorLexico.TablaSimbolos;
 import AnalizadorLexico.Token;
 
 public class AccionSemantica10 extends AccionSemantica {
+    public AccionSemantica10(TablaSimbolos ts, int indice) {
+        super(ts,indice);
+    }
+
     @Override
     public String accion(char c) {
         Long aux = Long.parseLong(this.contenido.toString());
@@ -16,4 +21,5 @@ public class AccionSemantica10 extends AccionSemantica {
             //error de rango
             return null;
     }
+
 }

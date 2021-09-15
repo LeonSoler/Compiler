@@ -5,7 +5,12 @@ public abstract class AccionSemantica {
 
     protected static StringBuilder contenido;
     protected TablaSimbolos tabla;
-    static private int indice = 0;
+    protected int indice;
+
+    public AccionSemantica(TablaSimbolos ts, int indice) {
+        this.indice = indice;
+        this.tabla = ts;
+    }
 
     public abstract String accion(char c);
 
@@ -15,6 +20,10 @@ public abstract class AccionSemantica {
 
     public void decrementarIndice(){
         this.indice--;
+    }
+
+    public String devolver(){
+        return this.contenido.toString();
     }
 
 }

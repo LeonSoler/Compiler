@@ -6,8 +6,12 @@ import java.util.Arrays;
 public class TablaSimbolos {
     private ArrayList<String> palabrasReservadas = new ArrayList<String>(
             Arrays.asList("IF","THEN","ELSE","ENDIF","PRINT","FUNK","RETURN","BEGIN","END","BREAK","WHILE","DO","ULONG","DOUBLE"));
-    //private tabla
+
     private ArrayList<Token> tabla;
+
+    public TablaSimbolos(){
+
+    }
     public boolean containsPalabaReservada(String lexema){
         return this.palabrasReservadas.contains(lexema);
     }
