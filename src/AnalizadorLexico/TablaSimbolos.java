@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class TablaSimbolos {
-    private ArrayList<String> palabrasReservadas = new ArrayList<String>(
+    private ArrayList<String> palabrasReservadas = new ArrayList<>(
             Arrays.asList("IF","THEN","ELSE","ENDIF","PRINT","FUNK","RETURN","BEGIN","END","BREAK","WHILE","DO","ULONG","DOUBLE"));
 
     private ArrayList<Token> tabla;
@@ -22,5 +22,13 @@ public class TablaSimbolos {
 
     public boolean contains(Token t) {
         return this.tabla.contains(t);
+    }
+
+    public int buscarIndice(String str) {
+        for(Token t : this.tabla){
+            if(t.getLexema() == str)
+                return this.tabla.indexOf(t);
+        }
+        return 0;
     }
 }

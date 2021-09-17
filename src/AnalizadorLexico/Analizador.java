@@ -6,22 +6,24 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 public class Analizador {
 
     private static Analizador instancia;
 
     private int linea = 1;
-    int indice = 0;
+    AtomicInteger indice = new AtomicInteger(0);
     private ArrayList<Integer> archivo;
-    private ArrayList<Integer> tokens;
+    private ArrayList<TokenLexema> tokens;
     private int[][] matrizEstados = new int[17][23];
     private ArrayList<String> erroresLexicos = new ArrayList<>();
 
     private TablaSimbolos tabla = new TablaSimbolos();
     private AccionSemantica1 as1 = new AccionSemantica1(tabla, indice);
     private AccionSemantica2 as2 = new AccionSemantica2(tabla, indice);
-    private AccionSemantica3 as3 = new AccionSemantica3(tabla,indice);
+    private AccionSemantica3 as3 = new AccionSemantica3(tabla, indice);
     private AccionSemantica4 as4 = new AccionSemantica4(tabla, indice);
     private AccionSemantica5 as5 = new AccionSemantica5(tabla, indice);
     private AccionSemantica6 as6 = new AccionSemantica6(tabla, indice);
@@ -59,11 +61,6 @@ public class Analizador {
         this.cargarMapa();
         this.archivo = new ArrayList<>();
         this.tokens = new ArrayList<>();
-        try {
-            this.leer("codigo");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void cargarMapa() {
@@ -118,7 +115,7 @@ public class Analizador {
         this.tokenIdentificacion.put("IF",278);
         this.tokenIdentificacion.put("THEN",279);
         this.tokenIdentificacion.put("ELSE",280);
-        this.tokenIdentificacion.put("ENFIF",281);
+        this.tokenIdentificacion.put("ENDIF",281);
         this.tokenIdentificacion.put("PRINT",282);
         this.tokenIdentificacion.put("FUNC",283);
         this.tokenIdentificacion.put("RETURN",284);
@@ -134,12 +131,12 @@ public class Analizador {
             instancia = new Analizador();
         return instancia;
     }
-
     public void leer(String direccion) throws IOException {
-        FileReader fr = new FileReader(direccion);
+        BufferedReader br = new BufferedReader(new InputStreamReader(getFileFromResourceAsStream(direccion)));
         int ascii;
-        while((ascii = fr.read()) != -1)
+        while((ascii = br.read()) != -1) {
             archivo.add(ascii);
+        }
     }
 
     private InputStream getFileFromResourceAsStream(String fileName) {
@@ -153,7 +150,7 @@ public class Analizador {
         }
     }
 
-    public int [][] cargarMatEstados(String direccion, int rows, int columns) {
+    private int [][] cargarMatEstados(String direccion, int rows, int columns) {
         Scanner sc = new Scanner(new BufferedReader(new InputStreamReader(getFileFromResourceAsStream(direccion))));
 
         int [][] myArray = new int[rows][columns];
@@ -168,28 +165,44 @@ public class Analizador {
         return myArray;
     }
 
-    public ArrayList<Integer> convertirToken() {
+    public ArrayList<TokenLexema> leerToken() {
         int estado = 0;
         int estadoAnt = -1;
         char caracter = ' ';
-        while(indice < this.archivo.size()){
-            int ascii = this.archivo.get(indice);
+        int ascii = this.archivo.get(indice.intValue());
+        caracter = detectarCaracter(ascii);
+        while(indice.intValue() < this.archivo.size()){
             if (ascii == 10){
                 this.linea++;
             }
-            if(estado == 17){
-                this.tokens.add(this.tokenIdentificacion.get(this.matrizAcciones[estadoAnt][estado].devolver()));
+            if (estado == 17){
+                TokenLexema tokenLexema = this.matrizAcciones[estadoAnt][estado].accion(caracter);
+                String tipoToken = this.matrizAcciones[estadoAnt][estado].devolver();
+                tokenLexema.setID(this.tokenIdentificacion.get(tipoToken));
+                this.tokens.add(tokenLexema);
                 estado = 0;
             }
-            if(estado == 18){
+
+            else if(estado == 18) {
+                estado = 0;
                 this.erroresLexicos.add("No se puede agregar " + caracter + " en " + this.linea);
             }
-            caracter = (char)ascii;
             this.matrizAcciones[estado][this.columnaMatriz.get(caracter)].accion(caracter);
+            ascii = this.archivo.get(indice.intValue());
+            caracter = detectarCaracter(caracter);
             estadoAnt = estado;
             estado = this.matrizEstados[estado][this.columnaMatriz.get(caracter)];
         }
         return tokens;
+    }
+
+    private char detectarCaracter(int ascii) {
+        if ((ascii >= 65 && ascii <= 90) || (ascii >= 97) && (ascii <= 122))
+            return 'l';
+        else if (ascii >= 48 && ascii <= 57)
+            return 'd';
+        else
+            return (char) ascii;
     }
 }
 

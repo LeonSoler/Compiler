@@ -1,14 +1,20 @@
 package AccionesSemanticas;
 import AnalizadorLexico.TablaSimbolos;
+import AnalizadorLexico.TokenLexema;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class AccionSemantica7 extends AccionSemantica {
 
-    public AccionSemantica7(TablaSimbolos ts, int indice){
+    public AccionSemantica7(TablaSimbolos ts, AtomicInteger indice){
         super(ts,indice);
     }
 
     @Override
-    public String accion(char c) {
+    public TokenLexema accion(char c) {
         this.decrementarIndice();
-        return "se leyo el token " + this.contenido;
+        this.tipo = this.contenido.toString();
+        System.out.println("se leyo el token " + this.contenido.toString());
+        return new TokenLexema(-1);
     }
 }

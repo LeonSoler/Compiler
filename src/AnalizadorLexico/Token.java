@@ -1,19 +1,16 @@
 package AnalizadorLexico;
 
-
 import java.util.Objects;
 
 public class Token {
-    private String tipo;
     private String lexema;
 
-    public Token(String tipo, String lexema){
-        this.tipo = tipo;
+    public Token(String lexema){
         this.lexema = lexema;
     }
 
-    public String getTipo() {
-        return this.tipo;
+    public String getLexema() {
+        return this.lexema;
     }
 
     @Override
@@ -21,11 +18,11 @@ public class Token {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Token token = (Token) o;
-        return Objects.equals(tipo, token.tipo) && Objects.equals(lexema, token.lexema);
+        return Objects.equals(lexema, token.lexema);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tipo, lexema);
+        return Objects.hash(lexema);
     }
 }

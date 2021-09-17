@@ -1,29 +1,31 @@
 package AccionesSemanticas;
 import AnalizadorLexico.*;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public abstract class AccionSemantica {
 
     protected static StringBuilder contenido;
     protected TablaSimbolos tabla;
-    protected int indice;
+    protected AtomicInteger indice = null;
+    protected String tipo;
 
-    public AccionSemantica(TablaSimbolos ts, int indice) {
+    public AccionSemantica(TablaSimbolos ts, AtomicInteger indice) {
         this.indice = indice;
         this.tabla = ts;
     }
 
-    public abstract String accion(char c);
+    public abstract TokenLexema accion(char c);
 
     public void incrementarIndice(){
-        this.indice++;
+        this.indice.set(this.indice.intValue()+1);
     }
 
     public void decrementarIndice(){
-        this.indice--;
+        this.indice.set(this.indice.intValue()-1);
     }
 
     public String devolver(){
-        return this.contenido.toString();
+        return this.tipo;
     }
-
 }
