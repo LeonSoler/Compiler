@@ -5,16 +5,15 @@ import AnalizadorLexico.TokenLexema;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class AccionSemantica2 extends AccionSemantica{
+public class AccionSemantica11 extends AccionSemantica{
 
-    public AccionSemantica2(TablaSimbolos ts, AtomicInteger indice){
-        super(ts, indice);
+    public AccionSemantica11(TablaSimbolos ts, AtomicInteger indice){
+        super(ts,indice);
     }
-
     @Override
     public TokenLexema accion(char c) {
-        contenido.append(c);
-        incrementarIndice();
+        contenido = new StringBuilder();
+        this.incrementarIndice();
         return null;
     }
 }

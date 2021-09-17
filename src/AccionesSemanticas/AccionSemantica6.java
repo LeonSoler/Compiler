@@ -13,7 +13,7 @@ public class AccionSemantica6 extends AccionSemantica {
 
     @Override
     public TokenLexema accion(char c) {
-        System.out.println("se leyo el comentario" + this.contenido);
+        System.out.println("se leyo el comentario" + contenido);
         return null;
     }
 }

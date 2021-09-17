@@ -17,7 +17,6 @@ public class Analizador {
     AtomicInteger indice = new AtomicInteger(0);
     private ArrayList<Integer> archivo;
     private ArrayList<TokenLexema> tokens;
-    private int[][] matrizEstados = new int[17][23];
     private ArrayList<String> erroresLexicos = new ArrayList<>();
 
     private TablaSimbolos tabla = new TablaSimbolos();
@@ -31,12 +30,14 @@ public class Analizador {
     private AccionSemantica8 as8 = new AccionSemantica8(tabla, indice);
     private AccionSemantica9 as9 = new AccionSemantica9(tabla, indice);
     private AccionSemantica10 as10 = new AccionSemantica10(tabla, indice);
+    private AccionSemantica11 as11 = new AccionSemantica11(tabla, indice);
 
     private HashMap<String, Integer> tokenIdentificacion = new HashMap<>();
     private HashMap<Character, Integer> columnaMatriz = new HashMap<>();
 
+
     private AccionSemantica[][] matrizAcciones = {
-            {as1, as1, as1, as4, as1, as4, as4, as4, as4, as4, as4, as1, as1, as1, as1, as1, as1, as1, null, null, null, as9, as1},
+            {as1, as1, as1, as4, as1, as4, as4, as4, as4, as4, as4, as1, as1, as1, as1, as1, as1, as1, as11, as11, null, as9, as1},
             {as2, as2, as3, as3, as3, as3, as3, as3, as3, as3, as3, as2, as3, as3, as3, as3, as3, as3, as3, as3, as3, as3, as2},
             {as7, as7, as2, as7, as7, as7, as7, as7, as7, as7, as7, as7, as7, as7, as7, as7, as7, as7, as7, as7, as7, as7, as7},
             {as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2},
@@ -48,15 +49,35 @@ public class Analizador {
             {as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as8, as9, as9, as9, as9},
             {as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as8, as9, as9, as9, as9},
             {as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as2, as8, as2, as2, as2, as2, as2},
-            {as2, as5, as5, as5, as2, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as2},
+            {as10, as2, as10, as10, as2, as5, as10, as10, as10, as10, as10, as10, as10, as10, as10, as10, as10, as10, as10, as10, as10, as10, as10},
             {as9, as2, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9},
             {as5, as2, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as2},
             {as9, as9, as9, as9, as9, as9, as9, as9, as9, as2, as2, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9, as9},
             {as5, as2, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5, as5}
     };
 
+    private int[][] matrizEstados ={
+            {1, 12, 2, 17, 13, 17, 17, 17, 17, 17, 17, 1, 5, 6, 10, 7, 8, 11, 9, 0, 0, 18, 1},
+            {1, 1, 17, 17, 17, 17, 17, 17, 17, 17, 17, 1, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 1},
+            {17, 17, 3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17},
+            {3, 3, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+            {3, 3, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+            {17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17},
+            {17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17},
+            {17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17},
+            {18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 17, 18, 18, 18, 18, 18, 18, 18},
+            {18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 17, 18, 18, 18, 18},
+            {18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 17, 18, 18, 18, 18, 18, 18, 18, 18},
+            {11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 17, 11, 11, 11, 11, 11},
+            {17, 12, 17, 17, 14, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17},
+            {18, 14, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18},
+            {17, 14, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 15},
+            {18, 18, 18, 18, 18, 18, 18, 18, 18, 16, 16, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18},
+            {17, 16, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17}
+    };
+
     private Analizador(){
-        this.cargarMatEstados("matriz",17,23);
+        //this.cargarMatEstados("matriz",17,23);
         this.cargarTokens();
         this.cargarMapa();
         this.archivo = new ArrayList<>();
@@ -84,6 +105,7 @@ public class Analizador {
         this.columnaMatriz.put('%',17);
         this.columnaMatriz.put('&',18);
         this.columnaMatriz.put('\t',19);
+        this.columnaMatriz.put(' ',19);
         this.columnaMatriz.put('\n',20);
         this.columnaMatriz.put('c',21); //resto
         this.columnaMatriz.put('e',22);
@@ -152,7 +174,6 @@ public class Analizador {
 
     private int [][] cargarMatEstados(String direccion, int rows, int columns) {
         Scanner sc = new Scanner(new BufferedReader(new InputStreamReader(getFileFromResourceAsStream(direccion))));
-
         int [][] myArray = new int[rows][columns];
         while(sc.hasNextLine()) {
             for (int i=0; i<myArray.length; i++) {
@@ -169,15 +190,19 @@ public class Analizador {
         int estado = 0;
         int estadoAnt = -1;
         char caracter = ' ';
-        int ascii = this.archivo.get(indice.intValue());
-        caracter = detectarCaracter(ascii);
-        while(indice.intValue() < this.archivo.size()){
+        int ascii;
+        char caracterMapa;
+
+        while(indice.intValue() < this.archivo.size() -1 ){
+            ascii = this.archivo.get(indice.intValue());
+            caracter = (char) ascii;
+            caracterMapa = detectarCaracter(caracter);
+            TokenLexema tokenLexema = this.matrizAcciones[estadoAnt][this.columnaMatriz.get(caracterMapa)].accion(caracter);
             if (ascii == 10){
                 this.linea++;
             }
             if (estado == 17){
-                TokenLexema tokenLexema = this.matrizAcciones[estadoAnt][estado].accion(caracter);
-                String tipoToken = this.matrizAcciones[estadoAnt][estado].devolver();
+                String tipoToken = this.matrizAcciones[estadoAnt][this.columnaMatriz.get(caracterMapa)].devolver();
                 tokenLexema.setID(this.tokenIdentificacion.get(tipoToken));
                 this.tokens.add(tokenLexema);
                 estado = 0;
@@ -187,11 +212,9 @@ public class Analizador {
                 estado = 0;
                 this.erroresLexicos.add("No se puede agregar " + caracter + " en " + this.linea);
             }
-            this.matrizAcciones[estado][this.columnaMatriz.get(caracter)].accion(caracter);
-            ascii = this.archivo.get(indice.intValue());
-            caracter = detectarCaracter(caracter);
             estadoAnt = estado;
-            estado = this.matrizEstados[estado][this.columnaMatriz.get(caracter)];
+            estado = this.matrizEstados[estado][this.columnaMatriz.get(caracterMapa)];
+
         }
         return tokens;
     }

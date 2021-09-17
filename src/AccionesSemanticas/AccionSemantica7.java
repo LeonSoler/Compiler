@@ -13,8 +13,8 @@ public class AccionSemantica7 extends AccionSemantica {
     @Override
     public TokenLexema accion(char c) {
         this.decrementarIndice();
-        this.tipo = this.contenido.toString();
-        System.out.println("se leyo el token " + this.contenido.toString());
+        this.tipo = contenido.toString();
+        System.out.println("se leyo el token " + contenido.toString());
         return new TokenLexema(-1);
     }
 }

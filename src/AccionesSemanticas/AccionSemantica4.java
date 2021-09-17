@@ -13,10 +13,12 @@ public class AccionSemantica4 extends AccionSemantica {
 
     @Override
     public TokenLexema accion(char c) {
-        this.contenido = new StringBuilder(c);
+        contenido = new StringBuilder();
+        contenido.append(c);
         this.incrementarIndice();
-        this.contenido.toString();
-        System.out.println("Se leyo el caracter " + this.contenido);
-        return new TokenLexema(this.tabla.buscarIndice(this.contenido.toString()));
+        contenido.toString();
+        tipo = String.valueOf(c);
+        System.out.println("Se leyo el caracter " + contenido);
+        return new TokenLexema(-1);
     }
 }

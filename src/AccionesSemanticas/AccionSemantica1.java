@@ -12,7 +12,8 @@ public class AccionSemantica1 extends AccionSemantica{
 
     @Override
     public TokenLexema accion(char c) {
-        this.contenido = new StringBuilder(c);
+        contenido = new StringBuilder();
+        contenido.append(c);
         this.incrementarIndice();
         return null;
     }

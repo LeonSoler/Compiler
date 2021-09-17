@@ -7,7 +7,7 @@ public class TablaSimbolos {
     private ArrayList<String> palabrasReservadas = new ArrayList<>(
             Arrays.asList("IF","THEN","ELSE","ENDIF","PRINT","FUNK","RETURN","BEGIN","END","BREAK","WHILE","DO","ULONG","DOUBLE"));
 
-    private ArrayList<Token> tabla;
+    private ArrayList<Token> tabla = new ArrayList<>();
 
     public TablaSimbolos(){
 
