@@ -7,22 +7,22 @@ public abstract class AccionSemantica {
 
     protected static StringBuilder contenido;
     protected TablaSimbolos tabla;
-    protected AtomicInteger indice = null;
-    protected String tipo;
+    protected AtomicInteger indice ;
+    protected static String tipo;
 
-    public AccionSemantica(TablaSimbolos ts, AtomicInteger indice) {
+    public AccionSemantica(AtomicInteger indice) {
         this.indice = indice;
-        this.tabla = ts;
     }
-
+    public void setTabla(TablaSimbolos ts) {
+        this.tabla=ts;
+    }
+    public void setIndice(AtomicInteger i) {
+        this.indice=i;
+    }
     public abstract TokenLexema accion(char c);
 
     public void incrementarIndice(){
         this.indice.set(this.indice.intValue()+1);
-    }
-
-    public void decrementarIndice(){
-        this.indice.set(this.indice.intValue()-1);
     }
 
     public String devolver(){

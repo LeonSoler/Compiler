@@ -1,14 +1,13 @@
 package AccionesSemanticas;
 
-import AnalizadorLexico.TablaSimbolos;
 import AnalizadorLexico.TokenLexema;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AccionSemantica4 extends AccionSemantica {
 
-    public AccionSemantica4(TablaSimbolos ts, AtomicInteger indice) {
-        super(ts, indice);
+    public AccionSemantica4(AtomicInteger indice) {
+        super(indice);
     }
 
     @Override
@@ -18,7 +17,7 @@ public class AccionSemantica4 extends AccionSemantica {
         this.incrementarIndice();
         contenido.toString();
         tipo = String.valueOf(c);
-        System.out.println("Se leyo el caracter " + contenido);
+        System.out.println(contenido);
         return new TokenLexema(-1);
     }
 }
